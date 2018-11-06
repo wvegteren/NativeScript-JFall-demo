@@ -29,4 +29,19 @@ export class ItemComponent implements OnInit {
     this.messages.unshift(message);
     this.message = "";
   }
+
+
+  private convertToHexString(message: string): string[] {
+    let messageToSend: string[] = [];
+
+    // control characters
+    messageToSend.push('0x' + 't'.charCodeAt(0).toString(16));
+    messageToSend.push('0x' + '‘'.charCodeAt(0).toString(16));
+
+    for (let i = 0; i < message.length; i++) {
+      messageToSend.push('0x' + message.charCodeAt(i).toString(16));
+    }
+
+    return messageToSend;
+  }
 }
