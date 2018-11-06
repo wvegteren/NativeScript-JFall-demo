@@ -1,0 +1,23 @@
+<ActionBar title="Demo App" class="action-bar"> </ActionBar>
+
+<DockLayout stretchLastChild="true" class="page">
+
+  <Button text="Scan for devices"
+          (tap)="startScanning()"
+          class="btn btn-primary"
+          dock="top"></Button>
+
+  <ListView [items]="devices"
+            class="list-group"
+            dock="bottom">
+
+    <ng-template let-device="item">
+      <Label [nsRouterLink]="['/item', device.UUID]"
+             [text]="device.name"
+             class="list-group-item">
+      </Label>
+    </ng-template>
+
+  </ListView>
+
+</DockLayout>

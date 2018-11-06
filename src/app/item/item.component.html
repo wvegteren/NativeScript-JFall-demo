@@ -1,0 +1,28 @@
+<ActionBar title="Device" class="action-bar"></ActionBar>
+
+<DockLayout stretchLastChild="true" class="page form">
+
+  <TextField [text]="message"
+             (textChange)="onTextChange($event)"
+             (returnPress)="send()"
+             hint="Enter text to send ..."
+             class="input input-border m-20"
+             dock="top"></TextField>
+
+  <Button text="Send"
+          (tap)="send()"
+          class="btn btn-primary"
+          dock="bottom"></Button>
+
+  <ListView [items]="messages" class="list-group" dock="bottom">
+
+    <ng-template let-message="item">
+      <Label [text]="message"
+             (tap)="send(message)"
+             class="list-group-item">
+      </Label>
+    </ng-template>
+
+  </ListView>
+
+</DockLayout>
