@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TextField } from 'tns-core-modules/ui/text-field';
+import bluetooth = require('nativescript-bluetooth');
+import { Peripheral, WriteOptions } from 'nativescript-bluetooth';
 
 @Component({
   selector: 'ns-item',
@@ -18,6 +20,7 @@ export class ItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.UUID = this.route.snapshot.params["uuid"];
+    this.connect(this.UUID);
   }
 
   public onTextChange(args) {
@@ -28,8 +31,30 @@ export class ItemComponent implements OnInit {
   send(message: string = this.message) {
     this.messages.unshift(message);
     this.message = "";
+    this.write(this.UUID, message);
   }
 
+  connect(UUID: string) {
+    return bluetooth.connect({
+      UUID: UUID,
+      onConnected: (peripheral) => {
+        console.log('Connected :-)');
+      },
+      onDisconnected: (peripheral) => {
+        alert('Ooops, couldn\'t connect');
+      }
+    });
+  }
+
+  write(UUID: string, message: string): void {
+    let options: WriteOptions = {
+      peripheralUUID: UUID,
+      serviceUUID: 'ffe0',
+      characteristicUUID: 'ffe1',
+      value: this.convertToHexString(message).join(',')
+    }
+    bluetooth.writeWithoutResponse(options);
+  }
 
   private convertToHexString(message: string): string[] {
     let messageToSend: string[] = [];

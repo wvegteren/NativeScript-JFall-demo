@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import bluetooth = require('nativescript-bluetooth');
+import { Peripheral, WriteOptions } from 'nativescript-bluetooth';
 
 @Component({
   selector: 'ns-list',
@@ -17,17 +19,16 @@ export class ListComponent implements OnInit {
   startScanning() {
     this.devices = [];
 
-    this.devices.push({
-      UUID: '1234-567890-abc',
-      name: 'Demo 1',
-    });
-    this.devices.push({
-      UUID: '2345-567890-abc',
-      name: 'Demo 2',
-    });
-    this.devices.push({
-      UUID: '3456-567890-abc',
-      name: 'Demo 3',
+    bluetooth.startScanning({
+      serviceUUIDs: ['ffe0'],
+      seconds: 3,
+      skipPermissionCheck: false,
+
+      onDiscovered: (peripheral) => {
+        if (peripheral.name) {
+          this.devices.push(peripheral);
+        }
+      }
     });
   }
 
